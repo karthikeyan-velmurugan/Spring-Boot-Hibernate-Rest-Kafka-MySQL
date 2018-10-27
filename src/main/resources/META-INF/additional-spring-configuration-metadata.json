@@ -1,0 +1,22 @@
+{"properties": [
+  {
+    "name": "spring.hibernate.show-sql",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.hibernate.show-sql'"
+  },
+  {
+    "name": "spring.hibernate.ddl-auto",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.hibernate.ddl-auto'"
+  },
+  {
+    "name": "spring.hibernate.dialect",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.hibernate.dialect'"
+  },
+  {
+    "name": "spring.hibernate.scan-package",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.hibernate.scan-package'"
+  }
+]}
