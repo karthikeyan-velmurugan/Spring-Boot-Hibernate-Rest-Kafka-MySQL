@@ -7,8 +7,10 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ import com.cyber.domain.Job;
  */
 @Repository
 @Transactional
+@SuppressWarnings("unchecked")
 public class JobDao implements IJobDao{
 
 	private static final Logger log=LogManager.getLogger(JobDao.class);
@@ -45,7 +48,6 @@ public class JobDao implements IJobDao{
 		return id;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Job> getJob() {
 		log.info("Entered getJob for JobDao::");
@@ -58,7 +60,6 @@ public class JobDao implements IJobDao{
 		return (list!=null && list.size()>0)?list:null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Job findById(int id) {
 		log.info("Entered findById for JobDao::");
@@ -69,7 +70,7 @@ public class JobDao implements IJobDao{
 			log.error("Getting Job List Failed for JobDao:: ",ex);
 		}
 		return (list!=null && list.size()>0)?list.get(0):null;
-	}
+	}	
 
 	@Override
 	public void postBulkJobs(List<Job> jobs) {
@@ -83,5 +84,90 @@ public class JobDao implements IJobDao{
 		}catch(Exception ex) {
 			log.error("Failed adding Jobs List for JobDao:: ",ex);
 		}		
-	}	
+	}
+
+	@Override
+	public List<Job> findJobByType(String type) {
+		log.info("Entered findJobByType for JobDao::");
+		List<Job> list=null;
+		try {
+			list=getSession().createQuery("from Job where jobType=?").setParameter(0, type).list();
+		}catch(Exception ex) {
+			log.error("Getting Job List Failed for JobDao:: ",ex);
+		}
+		return (list!=null && list.size()>0)?list:null;
+	}
+
+	@Override
+	public List<Job> findJobByExp(String exp) {
+		log.info("Entered findJobByExp for JobDao::");
+		List<Job> list=null;
+		try {
+			list=getSession().createQuery("from Job where experience=?").setParameter(0, exp).list();
+		}catch(Exception ex) {
+			log.error("Getting Job List Failed for JobDao:: ",ex);
+		}
+		return (list!=null && list.size()>0)?list:null;	}
+
+	@Override
+	public List<Job> findJobByCountry(String country) {
+		log.info("Entered findJobByCountry for JobDao::");
+		List<Job> list=null;
+		try {
+			list=getSession().createQuery("from Job where country=?").setParameter(0, country).list();
+		}catch(Exception ex) {
+			log.error("Getting Job List Failed for JobDao:: ",ex);
+		}
+		return (list!=null && list.size()>0)?list:null;
+	}
+
+	@Override
+	public List<Job> findJobByAvailability(List<String> availabiltyList) {
+		log.info("AvailabiltyList for Job DAO :::: "+availabiltyList);
+		List<Job> list=null;
+		try {			
+			list=getSession().createCriteria(Job.class).add(Restrictions.in("availability", availabiltyList)).list();
+		}catch(Exception ex) {
+			log.error("Getting Job List Failed for JobDao:: ",ex);
+		}
+		return (list!=null && list.size()>0)?list:null;
+	}
+
+	@Override
+	public List<Job> findJobByPayRate(int low, int high) {
+		log.info("AvailabiltyList for Job DAO :::: "+low + " --- " +high);
+		List<Job> list = null;
+		try {
+			Criteria criteria = getSession().createCriteria(Job.class);
+			criteria.add(Restrictions.between("payRate", low, high));
+			list = criteria.list();
+		}catch(Exception ex) {
+			log.error("Getting Job List Failed for JobDao:: ",ex);
+		}
+		return (list!=null && list.size()>0)?list:null;
+	}
+
+	@Override
+	public List<Job> findJobBySkill(List<String> skill) {
+		log.info("AvailabiltyList for Job DAO :::: "+skill);
+		List<Job> list=null;
+		try {			
+			list=getSession().createCriteria(Job.class).add(Restrictions.in("skills", skill)).list();
+		}catch(Exception ex) {
+			log.error("Getting Job List Failed for JobDao:: ",ex);
+		}
+		return (list!=null && list.size()>0)?list:null;
+	}
+
+	@Override
+	public List<Job> findJobByLang(List<String> lang) {
+		log.info("AvailabiltyList for Job DAO :::: "+lang);
+		List<Job> list=null;
+		try {			
+			list=getSession().createCriteria(Job.class).add(Restrictions.in("language", lang)).list();
+		}catch(Exception ex) {
+			log.error("Getting Job List Failed for JobDao:: ",ex);
+		}
+		return (list!=null && list.size()>0)?list:null;
+	}
 }

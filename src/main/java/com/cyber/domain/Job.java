@@ -3,14 +3,16 @@
  */
 package com.cyber.domain;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,10 +28,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @Entity
 @Table(name="tbl_job")
-@JsonIgnoreProperties(value = {"postedDate"}, allowGetters = true)
-public class Job  implements Serializable{
-
-	private static final long serialVersionUID = 1L;
+@JsonIgnoreProperties(value = {"postedDate"})
+public class Job {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,9 +42,6 @@ public class Job  implements Serializable{
 	@Column(name="job_description")
 	public String jobDescription;
 
-	@Column(name="user_name")
-	public String userName;
-
 	@Column(name="country")
 	public String country;
 
@@ -55,25 +52,32 @@ public class Job  implements Serializable{
 	public String availability; // HOURLY, PART-TIME, FULL-TIME
 
 	@Column(name="reply_rate")
-	public String replyRate;
+	public int replyRate;
 
 	@Column(name="pay_rate")
-	public String payRate;
+	public int payRate;
 
 	@Column(name="experience")
-	public String experience;
+	public int experience;
 
 	@Column(name="skills")
 	public String skills; // JAVA, MOBILE, UI
 
 	@Column(name="language")
 	public String language; // ENGLISH, CHINESE
+	
+	@Column(name="job_type")
+	public String jobType;
 
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="IST")
 	@Column(name="posted_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreationTimestamp
 	public Date postedDate;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="user_id", nullable=false)
+	public UserInfo userInfo;
 
 	public int getJobId() {
 		return jobId;
@@ -97,14 +101,6 @@ public class Job  implements Serializable{
 
 	public void setJobDescription(String jobDescription) {
 		this.jobDescription = jobDescription;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
 	}
 
 	public String getCountry() {
@@ -131,27 +127,27 @@ public class Job  implements Serializable{
 		this.availability = availability;
 	}
 
-	public String getReplyRate() {
+	public int getReplyRate() {
 		return replyRate;
 	}
 
-	public void setReplyRate(String replyRate) {
+	public void setReplyRate(int replyRate) {
 		this.replyRate = replyRate;
 	}
 
-	public String getPayRate() {
+	public int getPayRate() {
 		return payRate;
 	}
 
-	public void setPayRate(String payRate) {
+	public void setPayRate(int payRate) {
 		this.payRate = payRate;
 	}
 
-	public String getExperience() {
+	public int getExperience() {
 		return experience;
 	}
 
-	public void setExperience(String experience) {
+	public void setExperience(int experience) {
 		this.experience = experience;
 	}
 
@@ -179,16 +175,27 @@ public class Job  implements Serializable{
 		this.postedDate = postedDate;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public UserInfo getUserInfo() {
+		return userInfo;
+	}
+
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
+	}
+
+	public String getJobType() {
+		return jobType;
+	}
+
+	public void setJobType(String jobType) {
+		this.jobType = jobType;
 	}
 
 	@Override
 	public String toString() {
-		return "Job [jobId=" + jobId + ", jobTitle=" + jobTitle + ", jobDescription=" + jobDescription + ", userName="
-				+ userName + ", country=" + country + ", state=" + state + ", availability=" + availability
-				+ ", replyRate=" + replyRate + ", payRate=" + payRate + ", experience=" + experience + ", skills="
-				+ skills + ", language=" + language + ", postedDate=" + postedDate + "]";
-	}    
-
+		return "Job [jobId=" + jobId + ", jobTitle=" + jobTitle + ", jobDescription=" + jobDescription + ", country="
+				+ country + ", state=" + state + ", availability=" + availability + ", replyRate=" + replyRate
+				+ ", payRate=" + payRate + ", experience=" + experience + ", skills=" + skills + ", language="
+				+ language + ", jobType=" + jobType + ", postedDate=" + postedDate + ", userInfo=" + userInfo + "]";
+	}
 }
