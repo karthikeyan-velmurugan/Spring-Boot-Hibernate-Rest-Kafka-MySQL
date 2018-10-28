@@ -107,7 +107,7 @@ public class JobController {
 	}
 
 	@GetMapping("/getByAvailability/{availability}")
-	public JobsResponseMessage getJobByAvailability(@PathVariable("availability") String availability) {
+	public JobsResponseMessage getJobByAvailability(@PathVariable("availability") String[] availability) {
 		log.info("Fetching Job with availability " + availability);
 		ResponseStatus status = null;
 		List<Job> job = jobHelper.getJobByAvailability(availability);

@@ -122,7 +122,7 @@ public class JobDao implements IJobDao{
 	}
 
 	@Override
-	public List<Job> findJobByAvailability(List<String> availabiltyList) {
+	public List<Job> findJobByAvailability(String[] availabiltyList) {
 		log.info("AvailabiltyList for Job DAO :::: "+availabiltyList);
 		List<Job> list=null;
 		try {			
@@ -148,11 +148,11 @@ public class JobDao implements IJobDao{
 	}
 
 	@Override
-	public List<Job> findJobBySkill(List<String> skill) {
+	public List<Job> findJobBySkill(String skill) {
 		log.info("AvailabiltyList for Job DAO :::: "+skill);
 		List<Job> list=null;
 		try {			
-			list=getSession().createCriteria(Job.class).add(Restrictions.in("skills", skill)).list();
+			list=getSession().createCriteria(Job.class).add(Restrictions.like("skills", "%"+skill+"%")).list();
 		}catch(Exception ex) {
 			log.error("Getting Job List Failed for JobDao:: ",ex);
 		}
@@ -160,11 +160,11 @@ public class JobDao implements IJobDao{
 	}
 
 	@Override
-	public List<Job> findJobByLang(List<String> lang) {
+	public List<Job> findJobByLang(String lang) {
 		log.info("AvailabiltyList for Job DAO :::: "+lang);
 		List<Job> list=null;
 		try {			
-			list=getSession().createCriteria(Job.class).add(Restrictions.in("language", lang)).list();
+			list=getSession().createCriteria(Job.class).add(Restrictions.like("language", "%"+lang+"%")).list();
 		}catch(Exception ex) {
 			log.error("Getting Job List Failed for JobDao:: ",ex);
 		}

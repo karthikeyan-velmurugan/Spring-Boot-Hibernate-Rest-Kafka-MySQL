@@ -21,9 +21,9 @@ public interface IJobDao {
 
 	public void postBulkJobs(List<Job> userInfo);
 
-	public List<Job> findJobBySkill(List<String> skill);
+	public List<Job> findJobBySkill(String skill);
 
-	public List<Job> findJobByAvailability(List<String> availabiltyList);
+	public List<Job> findJobByAvailability(String[] availabiltyList);
 
 	public List<Job> findJobByType(String type);
 
@@ -33,5 +33,5 @@ public interface IJobDao {
 
 	public List<Job> findJobByCountry(String country);
 
-	public List<Job> findJobByLang(List<String> lang);
+	public List<Job> findJobByLang(String lang);
 }

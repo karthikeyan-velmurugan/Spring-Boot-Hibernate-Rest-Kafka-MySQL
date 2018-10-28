@@ -3,7 +3,6 @@
  */
 package com.cyber.helper;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +19,6 @@ import com.cyber.domain.Job;
 import com.cyber.domain.UserInfo;
 import com.cyber.service.IJobService;
 import com.cyber.service.IUserService;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 /**
  * @author Karthikeyan
@@ -122,48 +119,21 @@ public class JobHelper {
 		return job;
 	}
 
-	public List<Job> getJobByAvailability(String availabiltyList) {
-		log.info("Fetching Job with availabiltyList " + availabiltyList);
-		List<String> list=null;
-
-		log.info("availabiltyList :::::::::::: "+availabiltyList);
-		String jsonStringArray = availabiltyList;
-
-		Gson converter = new Gson();         
-		Type type = new TypeToken<List<String>>(){}.getType();
-		list =  converter.fromJson(jsonStringArray, type);
-		log.info("list ::::::: "+list);
-		List<Job> job = iJobService.findJobByAvailability(list);		
+	public List<Job> getJobByAvailability(String[] availabiltyList) {
+		log.info("Fetching Job with availabiltyList " + availabiltyList);		
+		List<Job> job = iJobService.findJobByAvailability(availabiltyList);
 		return job;
 	}
 	
 	public List<Job> getJobBySkills(String skills) {
 		log.info("Fetching Job with skills " + skills);
-		List<String> list=null;
-
-		log.info("skills :::::::::::: "+skills);
-		String jsonStringArray = skills;
-
-		Gson converter = new Gson();         
-		Type type = new TypeToken<List<String>>(){}.getType();
-		list =  converter.fromJson(jsonStringArray, type);
-		log.info("list ::::::: "+list);
-		List<Job> job = iJobService.findJobBySkill(list);		
+		List<Job> job = iJobService.findJobBySkill(skills);		
 		return job;
 	}
 	
 	public List<Job> getJobByLang(String language) {
 		log.info("Fetching Job with language " + language);
-		List<String> list=null;
-
-		log.info("language :::::::::::: "+language);
-		String jsonStringArray = language;
-
-		Gson converter = new Gson();         
-		Type type = new TypeToken<List<String>>(){}.getType();
-		list =  converter.fromJson(jsonStringArray, type);
-		log.info("list ::::::: "+list);
-		List<Job> job = iJobService.findJobByLang(list);		
+		List<Job> job = iJobService.findJobByLang(language);		
 		return job;
 	}
 

@@ -64,7 +64,7 @@ public class JobService implements IJobService{
 	}
 
 	@Override
-	public List<Job> findJobByAvailability(List<String> availabiltyList) {
+	public List<Job> findJobByAvailability(String[] availabiltyList) {
 		// TODO Auto-generated method stub
 		return iJobDao.findJobByAvailability(availabiltyList);
 	}
@@ -76,14 +76,14 @@ public class JobService implements IJobService{
 	}
 
 	@Override
-	public List<Job> findJobBySkill(List<String> skill) {
+	public List<Job> findJobBySkill(String skill) {
 		// TODO Auto-generated method stub
-		return null;
+		return iJobDao.findJobBySkill(skill);
 	}
 
 	@Override
-	public List<Job> findJobByLang(List<String> lang) {
+	public List<Job> findJobByLang(String lang) {
 		// TODO Auto-generated method stub
-		return null;
+		return iJobDao.findJobByLang(lang);
 	}
 }
