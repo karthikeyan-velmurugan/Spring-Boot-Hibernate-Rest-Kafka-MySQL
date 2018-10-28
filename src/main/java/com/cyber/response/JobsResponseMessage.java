@@ -16,7 +16,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.cyber.domain.Job;
-
+/**
+ * @author Karthikeyan
+ *
+ */
 @XmlRootElement(name = "job")
 public class JobsResponseMessage {
 	@XmlElement(name = "status")

@@ -121,6 +121,7 @@ public class JobDao implements IJobDao{
 		return (list!=null && list.size()>0)?list:null;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public List<Job> findJobByAvailability(String[] availabiltyList) {
 		log.info("AvailabiltyList for Job DAO :::: "+availabiltyList);
@@ -138,6 +139,7 @@ public class JobDao implements IJobDao{
 		log.info("AvailabiltyList for Job DAO :::: "+low + " --- " +high);
 		List<Job> list = null;
 		try {
+			@SuppressWarnings("deprecation")
 			Criteria criteria = getSession().createCriteria(Job.class);
 			criteria.add(Restrictions.between("payRate", low, high));
 			list = criteria.list();
@@ -147,6 +149,7 @@ public class JobDao implements IJobDao{
 		return (list!=null && list.size()>0)?list:null;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public List<Job> findJobBySkill(String skill) {
 		log.info("AvailabiltyList for Job DAO :::: "+skill);
@@ -159,6 +162,7 @@ public class JobDao implements IJobDao{
 		return (list!=null && list.size()>0)?list:null;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public List<Job> findJobByLang(String lang) {
 		log.info("AvailabiltyList for Job DAO :::: "+lang);

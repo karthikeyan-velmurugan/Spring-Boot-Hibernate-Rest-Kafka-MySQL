@@ -62,6 +62,6 @@ public class UserInfo  {
 
 	@Override
 	public String toString() {
-		return "UserInfo [userId=" + userId + ", userName=" + userName + ", job=" + job + "]";
+		return "UserInfo [userId=" + userId + ", userName=" + userName + "]";
 	}
 }

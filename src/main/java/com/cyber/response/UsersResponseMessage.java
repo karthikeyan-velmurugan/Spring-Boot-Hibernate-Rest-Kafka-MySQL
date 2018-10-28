@@ -17,6 +17,7 @@ import java.util.Map;
 
 @XmlRootElement(name = "userInfo")
 public class UsersResponseMessage {
+	
 	@XmlElement(name = "status")
 	public ResponseStatus status;
 

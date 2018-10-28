@@ -3,7 +3,6 @@
  */
 package com.cyber.helper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +11,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +19,7 @@ import com.cyber.domain.Job;
 import com.cyber.domain.UserInfo;
 import com.cyber.service.IJobService;
 import com.cyber.service.IUserService;
+import com.cyber.service.KafkaConsumer;
 
 /**
  * @author Karthikeyan
@@ -37,6 +38,14 @@ public class JobHelper {
 
 	@Autowired
 	private UserHelper userHelper;
+	
+	@Autowired
+	private KafkaTemplate<String, Job> kafkaTemplate;
+
+	@Autowired
+	private KafkaConsumer consumer;
+	
+	private static final String TOPIC = "job-kafka-topic";
 
 	public int createJob(Job job){
 		int id=0;
@@ -59,9 +68,7 @@ public class JobHelper {
 	}
 
 	public String processExcel(MultipartFile excelfile) {		
-		List<Job> jobList=null;
 		try {
-			jobList = new ArrayList<>();
 			int i = 1;
 			XSSFWorkbook workbook = new XSSFWorkbook (excelfile.getInputStream());
 			XSSFSheet worksheet = workbook.getSheetAt(0);
@@ -71,16 +78,18 @@ public class JobHelper {
 				UserInfo userInfo=iUserService.findByName(row.getCell(2).getStringCellValue());
 				if(userInfo!=null) {
 					job=inserBulkJob(job, row, userInfo);
-					jobList.add(job);
-					iJobService.createJob(job);
+					//iJobService.createJob(job);
+					produceJob(job);
+					consumeMsg(job);
 				}else {
 					UserInfo entity=new UserInfo();
 					entity.setUserName(row.getCell(2).getStringCellValue());
 					int id=	userHelper.createUser(entity);
 					UserInfo user=iUserService.findById(id);
 					job=inserBulkJob(job, row, user);
-					jobList.add(job);
-					iJobService.createJob(job);
+					//iJobService.createJob(job);
+					produceJob(job);
+					consumeMsg(job);
 				}
 			}			
 			workbook.close();
@@ -88,6 +97,15 @@ public class JobHelper {
 			e.printStackTrace();
 		}
 		return "Uploded Sucessfully..!!";
+	}
+
+	public void produceJob(Job job) {
+		kafkaTemplate.send(TOPIC, job);
+	}
+	public void consumeMsg(Job job) {
+		log.info("Info for Consuming and Insert Data to DB..!!");
+		Job entity=consumer.consumeJob(job);
+		iJobService.createJob(entity);
 	}
 
 	public Job getJobById(int id) {
@@ -124,13 +142,13 @@ public class JobHelper {
 		List<Job> job = iJobService.findJobByAvailability(availabiltyList);
 		return job;
 	}
-	
+
 	public List<Job> getJobBySkills(String skills) {
 		log.info("Fetching Job with skills " + skills);
 		List<Job> job = iJobService.findJobBySkill(skills);		
 		return job;
 	}
-	
+
 	public List<Job> getJobByLang(String language) {
 		log.info("Fetching Job with language " + language);
 		List<Job> job = iJobService.findJobByLang(language);		
@@ -142,7 +160,7 @@ public class JobHelper {
 		List<Job> job = iJobService.findJobByPayRate(low, high);		
 		return job;
 	}
-	
+
 	public Job insertJob(Job job,UserInfo user){
 		Job jobEntity = new Job();
 		jobEntity.setJobTitle(job.getJobTitle());
